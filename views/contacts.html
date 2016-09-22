@@ -1,0 +1,17 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{isCommonView?page_name:_inspection_units}}</h2>
+                    <div class="pull-right">
+                        <button ng-click="showCustomerAddForm()" ng-hide="!hasPermission('CreateCustomerHandler')" class="btn btn-primary">{{_add_new}}</button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

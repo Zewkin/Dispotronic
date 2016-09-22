@@ -1,0 +1,31 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_customers}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="gridCustomers" ui-grid="gridCustomers" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9" ng-hide="!customer">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_keyfigures}}</h2>
+                    <div class="pull-right">
+                      <button class="btn btn-white" ng-click="keyFigureForm('lg')" ng-show="keyfigure">Edit</button>
+                      <button class="btn btn-white" ng-click="deleteKeyFigure()" ng-show="keyfigure">Delete</button>
+                      <button class="btn btn-primary" ng-click="keyFigureForm('lg',true)">Add New</button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="ibox-content" ng-hide="gridKeyfigures.data.length==0">
+                    <div class="KeyFigures" ui-grid="gridKeyfigures" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+</div>

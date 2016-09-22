@@ -1,0 +1,57 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul side-navigation class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element" dropdown>
+                    <img alt="image" class="img-circle" src="img/profile_small.jpg"/>
+                    <a class="dropdown-toggle" dropdown-toggle href>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">David Williams</strong>
+                             </span>
+                                <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                            </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a ui-sref="profile">Profile</a></li>
+                        <li><a ui-sref="contacts">Contacts</a></li>
+                        <li><a ui-sref="inbox">Mailbox</a></li>
+                        <li class="divider"></li>
+                        <li><a href="../login.html">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            <li ui-sref-active="active" ng-hide="!isPageAccessAllowed('subscribers')">
+                <a ui-sref="index.subscribers" ng-click="setInitialState(); changeRoute();"><i class="fa fa-male"></i><span class="nav-label">{{_subscribers}}</span></a>
+            </li>
+            <li ui-sref-active="active" ng-hide="!isPageAccessAllowed('customers')">
+                <a ui-sref="index.customers" ng-click="setInitialState(); changeRoute();"><i class="fa fa-suitcase"></i><span class="nav-label">{{_customers}}</span></a>
+            </li>
+            <li ui-sref-active="active" ng-hide="!isPageAccessAllowed('users')">
+                <a ui-sref="index.users" ng-click="setInitialState(); changeRoute();"><i class="fa fa-users"></i><span class="nav-label">{{_users}}</span></a>
+            </li>
+            <li ui-sref-active="active" ng-hide="!isPageAccessAllowed('keyfigures')">
+                <a ui-sref="index.keyfigures" ng-click="setInitialState(); changeRoute();"><i class="fa fa-building-o"></i><span class="nav-label">{{_keyfigures}}</span></a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.frequency" ng-click="setInitialState(); changeRoute();"><i class="fa fa-calculator"></i><span class="nav-label">{{_frequency}}</span></a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.damage_assessment" ng-click="setInitialState(); changeRoute();"><i class="fa fa-cubes"></i><span class="nav-label">{{_damage_assessment}}</span></a>
+            </li>
+            <li ui-sref-active="active" ng-hide="!isPageAccessAllowed('contracts')">
+                <a ui-sref="index.contracts" ng-click="setInitialState(); changeRoute();"><i class="fa fa-building-o"></i><span class="nav-label">{{_contracts}}</span></a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="index.contracts" ng-click="setInitialState(); changeRoute();"><i class="fa fa-eye"></i><span class="nav-label">{{_events}}</span></a>
+            </li>
+            <li ui-sref-active="active" ng-hide="!isPageAccessAllowed('inspections')">
+                <a ui-sref="index.inspections" ng-click="setInitialState(); changeRoute();"><i class="fa fa-clock-o"></i><span class="nav-label">{{_inspections}}</span></a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

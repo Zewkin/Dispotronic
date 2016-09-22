@@ -1,0 +1,158 @@
+<style>
+
+.modal-body {
+    padding-top: 5px;
+    padding-bottom: 0px;
+}
+
+.modal-footer {
+    margin-top: -5px;
+}
+
+.additional-prices-header {
+    text-align: center;
+    color: white;
+    background-color: #969696;
+    height: 25px;
+}
+
+.additional-prices-label {
+    padding-top: 3px;
+}
+
+.ui-grid-row, .ui-grid-cell {
+    height: 25px !important;
+}
+
+.gridKeyfigurePrices {
+    height: 302px;
+}
+
+.ui-grid-viewport {
+    overflow: visible !important;
+}
+
+.ui-grid-canvas {
+    height: 302px !important;
+}
+
+</style>
+<div class="inmodal" role="dialog">
+    <form role="form" name="keyfigure_form" class="form-horizontal" novalidate ng-submit="saveKeyFigure(keyfigure_form)">
+        <div class="modal-header">
+            <h4 class="modal-title">{{isNew?_add_keyfigures:_edit_keyfigures}}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <label class="pull-left text-left">{{_keyfigure_code}}</label>
+                                <input type="text" class="form-control" style="text-align: center;"
+                                       maxlength="40"
+                                       ng-model="keyfigure.code"
+                                       name="code"
+                                       required>
+
+                                <div class="m-t-xs" ng-show="keyfigure_form.code.$invalid && keyfigure_form.submitted">
+                                    <small class="text-danger" ng-show="keyfigure_form.code.$error.required">
+                                        {{_required}}
+                                    </small>
+                                    <small class="text-danger" ng-show="keyfigure_form.code.$error.duplicate">
+                                        {{_keyfigure_code_duplicate}}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-4">
+                                <label class="pull-left text-left">{{_quality_profile}}</label>
+                                <select class="form-control" name="quality_profile_id" id="quality_profile_id"
+                                        ng-model="keyfigure.quality_profile_id"
+                                        ng-options="key as customerQpTitles[value].join(',&nbsp;&nbsp;') for (key , value) in QUALITY_PROFILES_IDS"
+                                        ng-init="keyfigure.quality_profile_id=keyfigure.quality_profile_id?keyfigure.quality_profile_id:'100801'"
+                                        required>
+                                </select>
+                            </div>
+
+                            <div class="col-xs-8">
+                                <label class="pull-left text-left">{{_hygiene_profile}}</label>
+                                <select class="form-control m-b" name="hygiene_profile_id"
+                                        ng-model="keyfigure.hygiene_profile_id"
+                                        ng-options="p.hygieneProfileID as (p.code + ' - ' + p.description)  for p in profiles" ng-change="updateQualityProfile(keyfigure.hygiene_profile_id)">
+                                    <option value=''>{{_not_defined}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-xs-4">
+                                <label class="pull-left text-left">{{_keyfigure_perfomance_per_hour}}</label>
+                                <input type="number" class="form-control" ng-pattern="/^[0-9-]*$/"
+                                       ng-model="keyfigure.performance_per_hour" name="performance_per_hour"
+                                       ng-required="keyfigure.price_type_id==200601">
+
+                                <div class="m-t-xs" ng-show="keyfigure_form.performance_per_hour.$invalid && keyfigure_form.submitted">
+                                    <small class="text-danger" ng-show="keyfigure_form.performance_per_hour.$error.required">
+                                        {{_required}}
+                                    </small>
+                                    <small class="text-danger" ng-show="keyfigure_form.performance_per_hour.$error.pattern">
+                                        {{_integer_required}}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <label class="pull-left text-left">{{_keyfigure_price_type}}</label>
+                                <select class="form-control" name="price_type_id"
+                                        ng-model="keyfigure.price_type_id"
+                                        ng-change="keyfigure_form.performance_per_hour.$error.required=false"
+                                        ng-options="key as translate.getTranslation(value) for (key, value) in PRICE_TYPE" ng-init="keyfigure.price_type_id = keyfigure.price_type_id?keyfigure.price_type_id:'200601'"
+                                        required>
+                                </select>
+
+                                <div class="m-t-xs" ng-show="keyfigure_form.price_type_id.$invalid && keyfigure_form.submitted">
+                                    <small class="text-danger" ng-show="keyfigure_form.price_type_id.$error.required">
+                                        {{_required}}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <label class="pull-left text-left">{{_keyfigure_price}}</label>
+                                <input type="text" class="form-control"
+                                       ng-model="keyfigure.price" name="price"
+                                       required>
+
+                                <div class="m-t-xs" ng-show="keyfigure_form.price.$invalid && keyfigure_form.submitted">
+                                    <small class="text-danger" ng-show="keyfigure_form.price.$error.required">Price is
+                                        {{_required}}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="additional-prices-header">
+                                <label class="additional-prices-label">{{_additional_prices}}</label>
+                            </div>
+                            <div ui-grid="gridKeyfigurePrices" ui-grid-edit ui-grid-validate></div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal" ng-click="cancel()">{{_close}}</button>
+            <button class="btn btn-primary" type="submit">{{_save}}</button>
+        </div>
+        <input type="hidden" ng-model="keyfigure.customer_id" ng-init="customer.customerID">
+    </form>
+</div>

@@ -1,0 +1,41 @@
+<div class="inmodal" role="dialog">
+  <div class="modal-body ui-tab">
+
+        <ul class="nav nav-tabs">
+            <li ng-class="contractsTab == 'general' ? 'active' : ''">
+                <a ng-click="contractsTab = 'general'" href="javascript:void(0);">{{_general}}</a>
+            </li>
+            <li ng-class="contractsTab == 'qp' ? 'active' : ''">
+                <a ng-click="contractsTab = 'qp'" href="javascript:void(0);">{{_quality_profiles}}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane" ng-class="contractsTab == 'general' ? 'active' : ''">
+                <form role="form" class="ng-pristine ng-valid">
+                    <div class="form-group">
+                        <label for="contractName" class="ng-binding">{{_name}}</label>
+                        <input type="text" id="contractName" ng-model="contract.name" class="form-control ng-pristine ng-valid" placeholder="{{_name}}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName" class="ng-binding">{{_description}}</label>
+                        <textarea id="customerName" ng-model="contract.description" class="form-control ng-pristine ng-valid" placeholder="{{_description}}"></textarea>
+                    </div>
+                    <div class="ibox-footer">
+                        <button type="submit" class="btn btn-primary" ng-class="contract.description && contract.name ? '' : 'disabled'" ng-click="saveContract(); cancel();">{{_save}}
+                        </button>
+                        <button type="submit" class="btn btn-primary" ng-hide="contract_state == 'edit'" ng-class="contract.description && contract.name ? '' : 'disabled'" ng-click="saveContract()">{{_save_continue}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" ng-class="contractsTab == 'qp' ? 'active' : ''" style="cursor: auto" ng-include="'templates/quality_profiles.tpl'">
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+        <!-- /.tab-content -->
+
+    <!-- nav-tabs-custom -->
+  </div>
+
+</div>

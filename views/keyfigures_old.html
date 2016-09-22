@@ -1,0 +1,81 @@
+<style>
+    .gridCustomers {
+
+        height: 397px;
+    }
+
+    .KeyFigures {
+        /*border: 1px solid rgb(212,212,212);*/
+        height: 366px
+    }
+
+    .box .box-body {
+        padding-bottom: 0px;
+    }
+
+    .box .box-body.grid-key-figures {
+        padding-top: 2px;
+    }
+
+    .ui-grid-menu-button {
+        height: 28px;
+    }
+</style>
+
+<aside class="right-side" ng-class="{'hide-sidebar': !showSidebar}">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {{page_name}}
+            <!--<small></small>-->
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="amc" class="alert-messages-container">
+                    <div x-errors-handler></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">
+                                    {{_customers}}
+                                </h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body table-responsive">
+                                <div class="gridCustomers" ui-grid="gridCustomers" ui-grid-selection ui-grid-auto-resize></div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">
+                                    {{_keyfigures}}
+                                </h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div>
+                                    <i tooltip="{{_add}}" class="fa fa-fw fa-plus-circle bigIconButton" ng-click="keyFigureForm('lg',true)" ng-show="customer"></i>
+                                    <i tooltip="{{_edit}}" class="fa fa-fw fa-edit bigIconButton" ng-click="keyFigureForm('lg')" ng-show="keyfigure"></i>
+                                    <i tooltip="{{_delete}}" class="fa fa-fw fa-trash-o bigIconButton" ng-click="deleteKeyFigure()" ng-show="keyfigure"></i>
+
+                                </div>
+                            </div>
+                            <div class="box-body table-responsive grid-key-figures" ng-hide="gridKeyfigures.data.length==0">
+                                <div class="KeyFigures" ui-grid="gridKeyfigures" ui-grid-selection ui-grid-auto-resize ng-hide="gridKeyfigures.data.length==0"></div>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                    </div>
+                </div><!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</aside><!-- /.right-side -->

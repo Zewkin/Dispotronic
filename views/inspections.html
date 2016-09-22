@@ -1,0 +1,57 @@
+<style>
+    .i_not_ready {
+        background-color: #B3D3EC!important;
+    }
+    .i_in_progress {
+        background-color: #FFDBA6!important;
+    }
+    .i_accepted {
+        background-color: #DDF0BE!important;
+    }
+    .i_rejected {
+        background-color: #FFD7D7!important;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_choose_customer}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <select ng-class="select_customer_highlight_class" ng-change="loadCustomersData()" ng-options="customer.customerID as customer.name for customer in customersData" ng-model="customerID" ng-disabled="element_disabled" class="form-control"></select>
+                </div>
+            </div>
+            <div ng-if="customerID>0" class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_inspections}}</h2>
+                    <div class="pull-right">
+                      <div class="btn-group">
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-plus-square-o"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-trash-o"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-users"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-gears"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-play"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-print"></i></button>
+                      </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div ng-if="customerID>0" ui-grid-selection ui-grid-auto-resize ui-grid="gridInspections"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-magrins" ng-if="showSamplingData">
+                <div class="ibox-title">
+                    <h2>{{_sampling_data}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div ui-grid="gridSamplingInfo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

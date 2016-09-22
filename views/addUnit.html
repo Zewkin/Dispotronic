@@ -1,0 +1,120 @@
+<style>
+    .h459 {
+        height: 459px!important;
+    }
+
+    .h271 {
+        height: 271px!important;
+    }
+</style>
+
+<div class="inmodal" role="dialog">
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div>
+                    <div class="form-group" style="float: left; width: 49%; margin-right: 2%;">
+                        <label for="unit_number" class="ng-binding">{{_unit_number}}</label>
+                        <input type="text" id="unit_number" ng-model="unit.roomNumber" class="form-control ng-pristine ng-valid" placeholder="{{_unit_number}}" />
+                    </div>
+                    <div class="form-group" style="float: left; width: 49%;">
+                        <label for="tag_id" class="ng-binding">{{_tag_id}}</label>
+                        <input type="text" id="tag_id" ng-model="unit.tagID" ng-value="" class="form-control ng-pristine ng-valid" placeholder="{{_tag_id}}" />
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group" style="float: left; width: 49%; margin-right: 2%;">
+                        <label for="unit_size" class="ng-binding">{{_unit_size}}</label>
+                        <input type="number" id="unit_size" onkeypress="onNumberKeyPress(event)" ng-model="unit.unitSize" class="form-control ng-pristine ng-valid" placeholder="{{_unit_size}}" step="0.1" min="0.1" />
+                    </div>
+                    <div class="form-group" style="float: left; width: 49%;">
+                        <label for="unit_size" class="ng-binding">{{_unit_used_area}}</label>
+                        <select id="unit_used_area" ng-model="unit.usedArea" ng-options="n as n+'%' for n in [] | range:100:5:5" class="form-control ng-pristine ng-valid" ng-init="unit.usedArea=unit.usedArea?unit.usedArea:100" placeholder="{{_unit_used_area}}"></select>
+                    </div>
+                </div>
+                <div class="form-group" style="float:left; width: 49%; margin-right: 2%;">
+                    <label for="unit_size" class="ng-binding">{{_unit_cleaning_frequency}}</label>
+                    <input type="number" id="unit_cleaning_frequency" onkeypress="onNumberKeyPress(event)" ng-model="unit.cleaningFrequency" class="form-control ng-pristine ng-valid" placeholder="{{_unit_cleaning_frequency}}" step="0.0001" min="0.0001" />
+                </div>
+                <div class="form-group" style="float: left; width: 49%;">
+                    <label for="storey" class="ng-binding">{{_storey}}</label>
+                    <input type="text" min="1" id="storey" ng-model="unit.storey" class="form-control ng-pristine ng-valid" placeholder="{{_storey}}" />
+                </div>
+                <div class="form-group" ng-show="customerKeyFigures.length>0">
+                    <label class="ng-binding">{{_keyfigure}}</label>
+                    <select class="form-control ng-pristine ng-valid chosen-select" style="width: 100%;" tabindex="4" name="keyFigureID" id="keyFigureID" ng-init="unit.keyFigureID ? unit.keyFigureID : unit.keyFigureID = ''" ng-model="unit.keyFigureID" ng-options="c.key_figure_id as c.code for c in customerKeyFigures"
+                        ng-change="setViewProfiles(unit.keyFigureID)">
+                        <option value=''>{{_not_defined}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="ng-binding">{{_quality_profile}}</label>
+                    <div class="btn-group">
+                        <button style="max-width: 85px; overflow: hidden; text-overflow: ellipsis; min-width: 30px;" ng-class="hygiene_profile_enabled ? 'disabled' : ''" class="btn btn-white btn-sm" ng-repeat="(profile , data) in getProfilesKeys(quality_profiles_data)" x-button-radio="unit.qualityProfileID"
+                            x-button-value="{{qualityProfileIdsFlipped[profile]}}" x-button-nested-scope="true">
+                            {{data}}
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="customerKeyFigures.length>0">
+                    <label class="ng-binding">{{_hygiene_profile}}</label>
+                    <select class="form-control ng-pristine ng-valid chosen-select" style="width: 100%;" tabindex="4" name="test" id="test" ng-init="unit.hygieneProfileID ? unit.hygieneProfileID : unit.hygieneProfile = ''" ng-model="unit.hygieneProfileID" ng-disabled="hygiene_profile_enabled"
+                        ng-change="setQualityProfile(unit.hygieneProfileID)" ng-options="item.hygieneProfileID as (item.code + ' - ' + item.description) for item in gridHygieneData">
+                        <option value=''>{{_not_defined}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="unit_description" class="ng-binding">{{_description}}</label>
+                    <textarea id="unit_description" ng-model="unit.description" class="form-control ng-pristine ng-valid unit-description"></textarea>
+                </div>
+                <div class="ibox-footer">
+                    <button type="submit" class="btn btn-primary" ng-class="!(
+                              unit.description &&
+                              unit.qualityProfileID &&
+                              unit.unitSize &&
+                              unit.roomNumber &&
+                              unit.storey) ? 'disabled' : '';
+                          " ng-click="saveUnit(); cancel();">{{_save}}
+                    </button>
+                    <button type="submit" class="btn btn-primary" ng-hide="unit_state == 'edit'" ng-class="!(
+                              unit.description &&
+                              unit.qualityProfileID &&
+                              unit.unitSize &&
+                              unit.roomNumber &&
+                              unit.storey) ? 'disabled' : '';
+                          " ng-click="saveUnit()">{{_save_continue}}
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div style="overflow: hidden;">
+                    <h2 style="margin-top: 0; display: inline-block; float: left;">{{_unit_attribute_name}}</h2>
+                    <div style="float: right; margin-bottom: 10px;">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="addOrEditAttr(true)"><i class="fa fa-plus-square-o"></i></button>
+                            <button class="btn btn-white" ng-if="gridUnitsAttributesApi.selection.getSelectedCount() > 0" ng-click="removeAttr()"><i class="fa fa-trash-o"></i></button>
+                            <button class="btn btn-white" ng-if="gridUnitsAttributesApi.selection.getSelectedCount() > 0"><i class="fa fa-pencil-square-o"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 10px;" ng-class="newAttrForm ? 'h271' : 'h459'" class="ui-grid grid-attributes" ui-grid="gridUnitsAttributes" ui-grid-auto-resize ui-grid-selection></div>
+                <div ng-show="newAttrForm">
+                    <form role="form" name="attr_form" novalidate ng-submit="saveAttr(attr_form)" autocomplete="off">
+                        <div class="form-group">
+                            <label>{{_attribute_name}}</label>
+                            <input type="text" name="name" autocomplete="off" class="form-control" typeahead="object.term for object in AtrtributesSuggest | filter:$viewValue | limitTo:8" ng-model="newAttr.name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>{{_attribute_value}}</label>
+                            <input type="text" class="form-control" ng-model="newAttr.value" name="value" required>
+                        </div>
+                        <button class="btn btn-primary" type="submit">{{_save}}</button>
+                        <button type="button" class="btn btn-white" ng-click="closeAttrForm()">{{_close}}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,225 @@
+<style>
+    tags-input {
+        display: block;
+        clear: left;
+    }
+
+    tags-input input {
+        display: inline-block;
+        width: 100%;
+        min-height: 32px;
+        border: 1px solid #CBD5DD;
+    }
+    .gridFilterAttr .chosen-container {
+        position: absolute;
+        width: calc(100% - 230px) !important;
+    }
+</style>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{isCommonView?page_name:_inspection_units}}</h2>
+                    <div class="pull-right">
+                        <div class="btn-group" ng-if="customerID>0">
+                            <button ng-click="switchView()" class="btn" ng-class="isCommonView ? 'active btn-primary' : 'btn-white'">Contracts</button>
+                            <button ng-click="switchView()" class="btn" ng-class="isCommonView ? 'btn-white' : 'btn-primary active'">Units</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="!isCommonView">
+        <div class="col-lg-6 filter-controls">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"></div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_contracts}}</label>
+                                <select chosen multiple class="form-control ng-pristine ng-valid chosen-select" data-placeholder=" " ng-model="filter.contract_id" ng-options="c.contractID as c.name for c in unitFilterData['contracts']" options="unitFilterData['contracts']" ng-change="dependFilterReset()">
+                                    <option value=''>{{_not_defined}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_storey}}</label>
+                                <tags-input ng-model="filter.storey_" class="ng-pristine ng-valid"></tags-input>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_description}}</label>
+                                <tags-input ng-model="filter.description_" class="ng-pristine ng-valid"></tags-input>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_tag_id}}</label>
+                                <tags-input ng-model="filter.tag_id_" class="ng-pristine ng-valid"></tags-input>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="ng-binding">{{_quality_profile}}</label>
+                                <select chosen multiple multiple class="form-control ng-pristine ng-valid chosen-select" style="width:100%;" tabindex="4" name="quality_profile_id" ng-model="filter.quality_profile_id" data-placeholder=" " ng-options="qualityProfileIdsFlipped[profile] as data for (profile , data) in getProfilesKeys(quality_profiles_data)"
+                                    ng-disabled="filter.key_figure_id">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="ng-binding">{{_unit_cleaning_frequency}}</label>
+                                <input class="form-control ng-pristine ng-valid" style="width:100%;border: 1px solid #CBD5DD;4px !important;" ng-model="filter.cleaning_frequency" placeholder="{{_filter_cleaning_frequency_placeholder}}"></input>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_buildings}}</label>
+                                <select chosen multiple class="form-control ng-pristine ng-valid chosen-select" name="buildingID" id="building_id" data-placeholder=" " ng-model="filter.building_id" ng-options="b.buildingID as b.name for b in unitFilterBuildingsTmp" options="unitFilterData['buildings']"
+                                    data-no_results_text=" ">
+                                    <option value=''>{{_not_defined}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_unit_number}}</label>
+                                <tags-input ng-model="filter.room_number_" class="ng-pristine ng-valid"></tags-input>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="pull-left text-left">{{_unit_size}}</label>
+                                <select chosen multiple class="form-control ng-pristine ng-valid chosen-select" style="width:100%;" tabindex="4" ng-model="filter.unit_size_id" data-placeholder=" " ng-options="value1 as INSTA_SIZE_IDS[value1] for (key1 , value1) in unitFilterData['insta_sizes']"
+                                    options="unitFilterData['insta_sizes']">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="ng-binding">{{_keyfigure}}</label>
+                                <select chosen multiple multiple class="form-control ng-pristine ng-valid chosen-select" style="width:100%;" tabindex="4" name="keyFigureID" ng-model="filter.key_figure_id" data-placeholder=" " ng-options="c.key_figure_id as c.code for c in customerKeyFigures"
+                                    ng-change="filter.quality_profile_id=null; filter.hygiene_profile_id=null">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="ng-binding">{{_hygiene_profile}}</label>
+                                <select chosen multiple class="form-control ng-pristine ng-valid chosen-select" style="width:100%;" tabindex="4" ng-model="filter.hygiene_profile_id" data-placeholder=" " ng-options="item.hygieneProfileID as (item.code + ' - ' + item.description) for item in gridHygieneData"
+                                    ng-disabled="filter.key_figure_id">
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="ng-binding">{{_status}}</label>
+                                <select class="form-control ng-pristine ng-valid" style="width:100%;border: 1px solid #CBD5DD;4px !important;" tabindex="4" ng-model="filter.status_id" data-placeholder=" " ng-options="value1 as translate.getTranslation('_'+key1) for (key1 , value1) in UNIT_STATUS">
+                                    <option value="">{{_any}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"></div>
+                <div class="ibox-content gridFilterAttr">
+                    <div ui-grid="gridFilterAttr"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="row" ng-show="isCommonView">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_choose_customer}}</h2></div>
+                <div class="ibox-content">
+                    <select ng-class="select_customer_highlight_class" ng-change="loadCustomersData()" style="margin-bottom: 10px;" class="form-control" ng-options="customer.customerID as customer.name for customer in customersData" ng-model="customerID" ng-disabled="element_disabled">
+                    </select>
+                </div>
+            </div>
+            <div ng-if="customerID>0" class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_contracts}}</h2>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button ng-click="addContractForm('lg')" class="btn btn-white"><i class="fa fa-plus-square-o"></i></button>
+                            <button class="btn btn-white" ng-click="deleteEntity('contract')" ng-if="gridContractsApi.selection.getSelectedCount() > 0"><i class="fa fa-trash-o"></i></button>
+                            <button class="btn btn-white" ng-click="editContract(); addContractForm('lg');" ng-if="gridContractsApi.selection.getSelectedCount() > 0"><i class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-white" ng-click="copyContract(); addContractForm('lg');" ng-if="gridContractsApi.selection.getSelectedCount() > 0"><i class="fa fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div ng-if="customerID>0" ui-grid-selection ui-grid-auto-resize ui-grid="gridContracts"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div ng-if="customerID > 0" class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_buildings}}</h2>
+                    <div class="pull-right">
+                        <div class="btn-group" ng-if="!buildingsCollapsed">
+                            <button class="btn btn-white" ng-click="showBuildingAddForm()"><i class="fa fa-plus-square-o"></i></button>
+                            <button class="btn btn-white" ng-click="deleteEntity('contractsBuilding')" ng-if="gridContractsBuildingsApi.selection.getSelectedCount() > 0"><i class="fa fa-trash-o"></i></button>
+                            <button class="btn btn-white" ng-click="editBuilding()" ng-if="gridContractsBuildingsApi.selection.getSelectedCount() > 0"><i class="fa fa-pencil-square-o"></i></button>
+                            <button class="btn btn-white"><i class="fa fa-download"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content" ng-if="!buildingsCollapsed">
+                    <div ui-grid="gridBuildings" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+                <div class="ibox-content" ng-if="buildingsCollapsed">
+                    <form role="form" class="ng-prisine ng-valid">
+                        <div class="form-group">
+                            <label for="building" class="ng-binding">{{_building}}</label>
+                            <input type="text" id="building" ng-model="building.name" class="form-control ng-pristine ng-valid" placeholder="{{_building}}" />
+                        </div>
+                        <div class="form-group">
+                            <label for="street" class="ng-binding">{{_address}}</label>
+                            <input type="text" id="street" ng-model="building.address" class="form-control ng-pristine ng-valid" placeholder="{{_address}}" />
+                        </div>
+                        <div class="ibox-footer">
+                            <button type="submit" class="btn btn-primary" ng-class="!(building.name && building.address) ? 'disabled': '';" ng-click="saveBuilding()">{{_save}}</button>
+                            <button type="submit" class="btn btn-primary" ng-hide="building_state == 'edit'" ng-class="!(building.name && building.address) ? 'disabled': '';" ng-click="saveBuilding()">{{_save_continue}}</button>
+                            <div class="pull-right">
+                                <button class="btn btn-white" ng-click="showBuildingList()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="ibox float-e-margins" ng-if="gridContractsBuildingsData.length > 0">
+                <div class="ibox-title">
+                    <h2>{{_contracts_buildings}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div ui-grid="gridContractsBuildings" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins" ng-if="gridUnitsData.length > 0">
+                <div class="ibox-title">
+                    <h2>{{_inspection_units}} ({{resultActive}} / {{gridUnitsData.length}})</h2>
+                    <div class="pull-right">
+                      <div class="btn-group">
+                        <button class="btn btn-white" ng-click="addUnit('lg')"><i class="fa fa-plus-square-o"></i></button>
+                        <button ng-if="gridUnitsApi.selection.getSelectedCount() > 0" class="btn btn-white"><i class="fa fa-trash-o"></i></button>
+                        <button ng-if="gridUnitsApi.selection.getSelectedCount() > 0" ng-click="editUnit('lg')" class="btn btn-white"><i class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-white"><i class="fa fa-download"></i></button>
+                        <button class="btn btn-white" ng-click="managePlans()"><i class="fa fa-building-o"></i></button>
+                        <button class="btn btn-white"><i class="fa fa-file-excel-o"></i></button>
+                      </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div ui-grid="gridUnits" ui-grid-selection ui-grid-auto-resize ui-grid-expandable ui-grid-pinning ui-grid-edit ui-grid-validate></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

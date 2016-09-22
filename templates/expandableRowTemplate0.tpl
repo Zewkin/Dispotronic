@@ -1,0 +1,1 @@
+<div ui-grid="row.entity.subGridOptions" style="height:59px;" ui-grid-edit></div>

@@ -1,0 +1,46 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_customers}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div class="gridCustomers" ui-grid="gridCustomers" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9" ng-if="gridCustomersApi.selection.getSelectedCount() > 0">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{_damage_objects}}</h2>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="objectForm('md', true)"><i class="fa fa-plus-square-o"></i></button>
+                            <button class="btn btn-white" ng-if="gridObjectsApi.selection.getSelectedCount() > 0" ng-click="deleteObject()"><i class="fa fa-trash-o"></i></button>
+                            <button class="btn btn-white" ng-if="gridObjectsApi.selection.getSelectedCount() > 0" ng-click="objectForm('md')"><i class="fa fa-pencil-square-o"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content" ng-hide="gridObjects.data.length==0">
+                    <div ui-grid="gridObjects" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+            </div>
+            <div class="ibox float-e-margins" ng-if="gridObjectsApi.selection.getSelectedCount() > 0">
+                <div class="ibox-title">
+                    <h2>{{_damage_objects_tasks}}</h2>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button class="btn btn-white" ng-click="taskForm('md', true)"><i class="fa fa-plus-square-o"></i></button>
+                            <button class="btn btn-white" ng-if="gridObjectsTasksApi.selection.getSelectedCount() > 0" ng-click="deleteTask()"><i class="fa fa-trash-o"></i></button>
+                            <button class="btn btn-white" ng-if="gridObjectsTasksApi.selection.getSelectedCount() > 0" ng-click="taskForm('md')"><i class="fa fa-pencil-square-o"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content" ng-hide="gridObjectsTasks.data.length==0">
+                    <div ui-grid="gridObjectsTasks" ui-grid-selection ui-grid-auto-resize></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

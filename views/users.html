@@ -1,0 +1,118 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h2>{{page_name}}</h2>
+                    <div class="pull-right">
+                        <button ng-click="showUserAddForm()" ng-class="state_add_new_user ? 'disabled' : ''" ng-hide="!hasPermission('CreateUserHandler')" class="btn btn-primary">{{_add_new}}</button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="gridStyle" ui-grid-auto-resize ui-grid="gridUsers"></div>
+                </div>
+            </div>
+            <div class="ibox float-e-margins" collapse="!state_add_new_user && !state_edit_user">
+                <div class="ibox-content">
+                    <form role="form">
+                        <div class="row">
+                            <div class="col-lg-6 form-group">
+                                <label for="performer_name">{{_name}}</label>
+                                <input type="text" ng-model="savableUser.firstName" class="form-control" id="performer_name" placeholder="{{_name}}">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label for="performer_surname">{{_surname}}</label>
+                                <input type="text" ng-model="savableUser.lastName" class="form-control" id="performer_surname" placeholder="{{_surname}}">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 form-group">
+                                <label for="performer_login">{{_login}}</label>
+                                <input type="text" ng-model="savableUser.login" class="form-control" id="performer_login" placeholder="{{_login}}">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label>{{_role}}</label>
+                                <div class="role-control">
+                                    <div class="btn-group">
+                                        <button style="height: 33px;" class="btn btn-white btn-sm" ng-repeat="role in roles_to_select" ng-class="(sysadmin_role_selected && role.name != '_role_sysadmin') || (RoleSelected() && RoleSelected()==100306 && role.id!='100306') || (RoleSelected() && RoleSelected()!=100306 && role.id=='100306') ? 'disabled' : (role.selected ? 'active' : '')"
+                                            ng-click="roleClick(role);">{{translate(role.name)}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-lg-6 form-group">
+                                <label for="performer_password">{{_password}}</label>
+                                <input type="password" ng-model="savableUser.password" class="form-control" id="performer_password" placeholder="{{_password}}" maxlength="32">
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <label for="performer_password">{{_repeat_password}}</label>
+                                <input type="password" ng-model="savableUser.passwordRepeat" class="form-control" id="performer_password_repeat" placeholder="{{_repeat_password}}" maxlength="32">
+                            </div>
+                        </div>
+
+                        <div class="row" ng-hide="!is_sysadmin_user">
+                            <div class="col-lg-6 form-group">
+                                <label>{{_subscriber}}</label>
+                                <select class="form-control" ng-model="savableUser.subscriberID" ng-options="sbscr.subscriberID as sbscr.name for sbscr in subscribersData" ng-change="customerUpdate(savableUser.subscriberID, true)">
+                                    <option>---</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="RoleSelected()==100306 && customersData.length>0">
+                            <div class="col-lg-6 form-group">
+                                <label for="customers">{{_customer}}</label>
+                                <select chosen multiple class="form-control ng-pristine ng-valid chosen-select" data-placeholder=" " id="customers" ng-model="savableUser.customers" ng-options="c.customerID as c.name for c in customersData">
+                                    <option value=''>{{_not_defined}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-lg-6 ibox-footer">
+
+                                <button type="submit" class="btn btn-primary btn-aligned" ng-class="
+                                  (
+                                      savableUser.login &&
+                                      savableUser.firstName &&
+                                      savableUser.lastName &&
+                                      atLeastOneRoleSelected() &&
+                                          (
+                                            savableUser.password &&
+                                            savableUser.passwordRepeat ||
+                                            state_edit_user
+                                          )
+                                  )
+                                  ? '' : 'disabled';
+                                  " ng-click="save_continue = false; savePerformer();">{{_save}}
+                                </button>
+
+                                <button type="submit" class="btn btn-primary btn-aligned" ng-hide="state_edit_user" ng-class="
+                                  (
+                                      savableUser.login &&
+                                      savableUser.firstName &&
+                                      savableUser.lastName &&
+                                      atLeastOneRoleSelected() &&
+                                          (
+                                            savableUser.password &&
+                                            savableUser.passwordRepeat ||
+                                            state_edit_user
+                                          )
+                                  )
+                                  ? '' : 'disabled';
+                                  " ng-click="save_continue = true; savePerformer()">{{_save_continue}}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
