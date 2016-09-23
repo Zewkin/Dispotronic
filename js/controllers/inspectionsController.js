@@ -373,7 +373,7 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
         };
 
         $scope.editInspection = function() {
-            var editableInspection = angular.copy($scope.gridInspections.selectedItems[0]);
+            var editableInspection = angular.copy($scope.selectedInspection);
             if (editableInspection) {
                 $scope.showSamplingData = false;
                 editableInspection.samplingPlanID = defaultInspection.samplingPlanID;
@@ -387,7 +387,7 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
         };
 
         $scope.deleteInspection = function() {
-            var selectedInspection = angular.copy($scope.gridInspections.selectedItems[0]);
+            var selectedInspection = angular.copy($scope.selectedInspection);
             if (selectedInspection) {
                 var msg = translate.getTranslation('_are_you_sure_to_delete_inspection?');
                 if (confirm(msg)) {
@@ -656,26 +656,26 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
             return permissions.hasPermission('GetInspectionUsersHandler') &&
                 ($scope.selectedInspection.inspectionID > 0) &&
                 [200201,200202,200203].indexOf(
-                    $scope.gridInspections.selectedItems[0].statusID
+                    $scope.selectedInspection.statusID
                 ) !== -1;
         };
 
         $scope.canStartInspection = function() {
             return permissions.hasPermission('UpdateInspectionHandler') &&
                 ($scope.selectedInspection.inspectionID > 0) &&
-                $scope.gridInspections.selectedItems[0].statusID == 200202;
+                $scope.selectedInspection.statusID == 200202;
         };
 
         $scope.canStopInspection = function() {
             return permissions.hasPermission('UpdateInspectionHandler') &&
                 ($scope.selectedInspection.inspectionID > 0) &&
-                $scope.gridInspections.selectedItems[0].statusID == 200203;
+                $scope.selectedInspection.statusID == 200203;
         };
 
         $scope.canFinishInspection = function() {
             return permissions.hasPermission('UpdateInspectionHandler') &&
                 ($scope.selectedInspection.inspectionID > 0) &&
-                $scope.gridInspections.selectedItems[0].statusID == 200204;
+                $scope.selectedInspection.statusID == 200204;
         };
 
         $scope.canDeleteInspection = function() {
@@ -685,7 +685,7 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
 
         $scope.canRequestAssessment = function() {
             return ($scope.selectedInspection.inspectionID > 0) &&
-                $scope.gridInspections.selectedItems[0].statusID != 200201;
+                $scope.selectedInspection.statusID != 200201;
         };
 
         var changeInspectionStatus = function(status, successFn, successAlert) {
@@ -838,7 +838,6 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
                 }
             }
             style.cursor = 'pointer';
-
             return style;
         };
 
@@ -957,7 +956,6 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
         $scope.gridInspections = {
             data: 'gridInspectionsData',
             enableColumnResize: true,
-            enableColumnReordering: true,
             columnDefs: [
                 {field: 'name', displayName: translate.getTranslation('_name')},
                 {field: 'contract.name', displayName: translate.getTranslation('_contract_name')},
@@ -984,7 +982,6 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
                         return true;
                     }
                     $scope.selectedInspection = row.entity;
-                    console.log($scope.selectedInspection);
                     $scope.sampling = angular.copy(defaultStrataGroups);
                     if (typeof $scope.selectedInspection.inspectionID == 'undefined') {
                         return true;
@@ -1030,8 +1027,6 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
                 })
             },
         };
-
-        $scope.gridSamplingInfoDef = getSamplingInfoDefs();
 
         $scope.$on("ngGridEventData", function (event, gridId) {
             if ($scope.gridInspections.gridId == gridId) {
@@ -1103,7 +1098,19 @@ angular.module('Insta').controller('InspectionsController', function ($scope, tr
 
         $scope.gridUnits = {
             data: 'gridUnitsData',
-            columnDefs: 'gridUnitsDef',
+            columnDefs: [
+                {field: 'roomNumber', displayName: translate.getTranslation('_unit_number')},
+                {field: 'description', displayName: translate.getTranslation('_description')},
+                {field: 'unitSize', displayName: translate.getTranslation('_unit_size')},
+                {field: 'qualityProfileID', displayName: translate.getTranslation('_quality_profile'),
+                    cellTemplate: 'templates/quality_profile_unit_cell.tpl'},
+                {field: 'hygieneProfileId', displayName: translate.getTranslation('_hygiene_code'),
+                    cellTemplate:'templates/hygiene_code.tpl'},
+                {field: 'feedback', displayName: translate.getTranslation('_feedback'),
+                    cellTemplate: 'templates/unit_feedback_cell.tpl',
+                    width: "100"
+                }
+            ],
             multiSelect: false,
             rowTemplate: 'templates/inspection_unit_row_template.tpl',
             selectedItems: []

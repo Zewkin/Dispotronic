@@ -28,13 +28,15 @@
                     <h2>{{_inspections}}</h2>
                     <div class="pull-right">
                       <div class="btn-group">
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-plus-square-o"></i></button>
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-pencil-square-o"></i></button>
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-trash-o"></i></button>
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-users"></i></button>
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-gears"></i></button>
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-play"></i></button>
-                        <button class="btn btn-white" ng-click="" ng-if=""><i class="fa fa-print"></i></button>
+                        <button class="btn btn-white" ng-click=""><i class="fa fa-plus-square-o"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canEditSelectedInspection()"><i class="fa fa-pencil-square-o"></i></button>
+                        <button class="btn btn-white" ng-click="deleteInspection()" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canDeleteInspection()"><i class="fa fa-trash-o"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canAssignUsers()"><i class="fa fa-users"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canGenerateSample()"><i class="fa fa-gears"></i></button>
+                        <button class="btn btn-white" ng-click="startInspection()" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canStartInspection()"><i class="fa fa-play"></i></button>
+                        <button class="btn btn-white" ng-click="stopInspection()" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canStopInspection()"><i class="fa fa-stop"></i></button>
+                        <button class="btn btn-white" ng-click="finishInspection()" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canFinishInspection()"><i class="fa fa-archive"></i></button>
+                        <button class="btn btn-white" ng-click="" ng-if="gridInspectionsApi.selection.getSelectedCount() > 0 && canRequestAssessment()"><i class="fa fa-print"></i></button>
                       </div>
                     </div>
                 </div>
@@ -50,6 +52,14 @@
                 </div>
                 <div class="ibox-content">
                     <div ui-grid="gridSamplingInfo"></div>
+                </div>
+            </div>
+            <div class="ibox float-e-magrins" ng-if="showInspectionUnits">
+                <div class="ibox-title">
+                    <h2>{{_inspection_units}}</h2>
+                </div>
+                <div class="ibox-content">
+                    <div ui-grid="gridUnits"></div>
                 </div>
             </div>
         </div>

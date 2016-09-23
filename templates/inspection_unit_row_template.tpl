@@ -1,8 +1,6 @@
 <div
-        ng-style="getInspectionUnitRowStyle(row.entity)"
-        ng-repeat="col in renderedColumns"
-        ng-class="getRowStyle(col)"
-        class="ngCell {{col.cellClass}}">
-    <div ng-cell>
-    </div>
+    ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid"
+    ng-style="grid.appScope.getInspectionUnitRowStyle(row.entity)"
+    class="ui-grid-cell"
+    ui-grid-cell>
 </div>
